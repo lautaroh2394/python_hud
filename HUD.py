@@ -1,10 +1,8 @@
 from tkinter import *
 import threading
-from Container import Container
 import time
 
 class HUD():
-    instance = None
     execution_thread = None
     raiz = None
     label_texto = None
@@ -13,6 +11,7 @@ class HUD():
     def create_widgets():
         HUD.raiz = Tk()
         HUD.raiz.geometry("300x300")
+        HUD.raiz.protocol("WM_DELETE_WINDOW", HUD.close_callback)
         
         frame = Frame()
         frame.pack(side="top")
@@ -22,43 +21,42 @@ class HUD():
         label.pack()
 
         HUD.label_texto = StringVar()
-        print(HUD.label_texto)
         label['textvariable'] = HUD.label_texto
         HUD.label_texto.set("No hay datos")
 
     @staticmethod
-    def task():
-        print("task")
-        HUD.raiz.after(100, HUD.task)  #Actualiza label en 0.1 seg
-        if Container.value is not None:
-            print("task - Container.value : " + Container.value)
-            HUD.update_label(Container.value)
+    def thread_start():
+        HUD.execution_thread = threading.Thread(target=HUD.start)
+        HUD.execution_thread.start()    
 
     @staticmethod
     def start():
         HUD.create_widgets()
-        #HUD.execution_thread = threading.Thread(target=HUD.raiz.mainloop)
-        #HUD.execution_thread.start()    
-
-        HUD.raiz.after(200, HUD.task)
         HUD.raiz.mainloop()
 
     @staticmethod
-    def stop():
-        HUD.execution_thread.stop()
+    def close():
+        #Llamar desde afuera del contexto del hilo
+        HUD.raiz.quit()
+        HUD.execution_thread.join()
 
     @staticmethod
     def update_label(texto):
         if HUD.label_texto is not None:
             HUD.label_texto.set(texto)
-
-
+    
+    @staticmethod
+    def close_callback():
+        print("close callback")
+        HUD.raiz.quit()
 
 if __name__ == "__main__":
-    t = threading.Thread(target=HUD.start)
-    t.start()
-
-    for i in range(10000):
+    HUD.thread_start()
+    #Prueba
+    for i in range(3):
         time.sleep(1)
-        Container.value = str(i)
-        print("main - Container.value: " + Container.value)
+        t = time.localtime()
+        HUD.update_label(f"{t.tm_year}/{t.tm_mon}/{t.tm_mday} - {t.tm_hour}:{t.tm_min}:{t.tm_sec}")
+
+    HUD.close()
+    print("Fin")
