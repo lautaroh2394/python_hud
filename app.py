@@ -1,5 +1,4 @@
 #Ejemplo de como usar HUD en otro script
-import threading
 import time
 from HUD import HUD
 HUD.thread_start()
