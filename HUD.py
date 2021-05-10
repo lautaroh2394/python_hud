@@ -12,6 +12,7 @@ class HUD():
         HUD.raiz = Tk()
         HUD.raiz.geometry("300x300")
         HUD.raiz.protocol("WM_DELETE_WINDOW", HUD.close_callback)
+        #HUD.raiz.protocol("WM_DELETE_WINDOW", HUD.raiz.quit)
         
         frame = Frame()
         frame.pack(side="top")
@@ -42,8 +43,13 @@ class HUD():
 
     @staticmethod
     def update_label(texto):
-        if HUD.label_texto is not None:
-            HUD.label_texto.set(texto)
+        if HUD.label_texto is not None and HUD.execution_thread.is_alive():
+            if type(texto) is str:
+                HUD.label_texto.set(texto)
+                return
+            if type(texto) is dict:
+                t = "\n".join([f"{key}: {texto[key]}" for key in texto.keys()])
+                HUD.label_texto.set(t)
     
     @staticmethod
     def close_callback():
@@ -56,7 +62,7 @@ if __name__ == "__main__":
     for i in range(3):
         time.sleep(1)
         t = time.localtime()
-        HUD.update_label(f"{t.tm_year}/{t.tm_mon}/{t.tm_mday} - {t.tm_hour}:{t.tm_min}:{t.tm_sec}")
+        HUD.update_label(f"{t.tm_year}/{t.tm_mon}/{t.tm_mday} \n {t.tm_hour}:{t.tm_min}:{t.tm_sec}")
 
     HUD.close()
     print("Fin")
