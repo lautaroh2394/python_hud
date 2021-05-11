@@ -24,7 +24,6 @@ class HUD():
 
         if "label" in opts and opts["label"]:
             label = Label(frame, text="prueba")
-            #label.pack(side="left")
             label.pack()
 
             HUD.label_texto = StringVar()
@@ -38,14 +37,6 @@ class HUD():
             HUD.text_widget.delete(0.0, HUD.text_widget.index('end'))
             HUD.text_widget.insert('0.0',"No hay datos")
             HUD.text_widget['state'] = 'disabled'
-            
-            '''
-            HUD.text_widget.tag_add('prueba', '1.0', '1.6')
-            HUD.text_widget.tag_add('prueba2', '2.3', '2.6')
-            HUD.text_widget.tag_configure('prueba', background='yellow', font='TkFixedFont', relief='raised')
-            HUD.text_widget.tag_configure('prueba2', background='red', font='TkFixedFont', relief='raised')
-            #HUD.text_widget['state'] = 'disabled'
-            '''
 
     @staticmethod
     def thread_start(opts = {"text": True}):
@@ -86,16 +77,16 @@ class HUD():
             if type(texto) is dict:
                 #TODO: Aceptar dicts con arrays y subdicts
                 indice = 0
-                for key in texto.keys():
-                    if "_color" not in key:
-                        color_key = f"{key}_color"
-                        linea = f"{key}: {texto[key]}\n"
-                        prox_indice = indice + linea.count("\n")
-                        HUD.text_widget.insert('end',linea)
-                        if color_key in texto:
-                            HUD.text_widget.tag_add(color_key, f"{indice+1}.0", f"{prox_indice + 1}.0")
-                            HUD.text_widget.tag_configure(color_key, background=texto[color_key], font='TkFixedFont', relief='raised')
-                        indice = prox_indice
+                keys = [key for key in texto.keys() if "_color" not in key]
+                for key in keys:
+                    color_key = f"{key}_color"
+                    linea = f"{key}: {texto[key]}\n"
+                    prox_indice = indice + linea.count("\n")
+                    HUD.text_widget.insert('end',linea)
+                    if color_key in texto:
+                        HUD.text_widget.tag_add(color_key, f"{indice+1}.0", f"{prox_indice + 1}.0")
+                        HUD.text_widget.tag_configure(color_key, background=texto[color_key], font='TkFixedFont', relief='raised')
+                    indice = prox_indice
 
             HUD.text_widget['state'] = 'disabled'
 
