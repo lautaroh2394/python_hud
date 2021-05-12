@@ -45,7 +45,7 @@ pip install -r ./requirements.txt
 
 #La propia ejecución del server:
 cd .../py hud/server
-flask run #O sino también: py app.py
+flask run --host=0.0.0.0 #O sino también: py app.py
 ```
 \
 Se puede ejecutar el script /server/cliente_test.py para ver un ejemplo de como se llamaría programáticamente a esta aplicación Flask
