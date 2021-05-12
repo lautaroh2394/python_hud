@@ -21,7 +21,7 @@ Para actualizar el HUD vía este enpoint se debe hacer un GET con el siguiente f
 \
 `[ip:puerto]/update_text/<type>/<texto>`
 \
-ip: Si se está ejecutando el serven en la misma pc, puede usarse localhost, 127.0.0.1, etc. Si el servidor está en otra máquina dentro de la misma red usar la ip privada de esa máquina
+ip: Si se está ejecutando el server en la misma pc, puede usarse localhost, 127.0.0.1, etc. Si el servidor está en otra máquina dentro de la misma red usar la ip privada de esa máquina
 \
 puerto: 5000
 \
@@ -41,7 +41,7 @@ Para levantar servidor:
 cd .../py hud/
 python -m venv venv
 ./venv/Scripts/activate
-pip install -r ..\requirements.txt
+pip install -r ./requirements.txt
 
 #La propia ejecución del server:
 cd .../py hud/server
